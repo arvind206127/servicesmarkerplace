@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <style>
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0d1117;
+      color: #e2e8f0;
+      margin: 0;
+    }
+
+    .font-syne {
+      font-family: 'Syne', sans-serif;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .accent-glow {
+      box-shadow: 0 0 24px rgba(249, 115, 22, 0.25);
+    }
+
+    .card-hover {
+      transition: all .2s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(249, 115, 22, 0.15);
+    }
+
+    input:focus {
+      outline: none;
+    }
+
+    .star {
+      color: #f59e0b;
+      cursor: pointer;
+      font-size: 1.4rem;
+    }
+
+    .star.empty {
+      color: #374151;
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0d1117;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 4px;
+    }
+
+    .nav-item {
+      transition: all .15s;
+    }
+
+    .nav-item:hover {
+      background: rgba(249, 115, 22, 0.12);
+    }
+
+    .nav-item.active {
+      background: rgba(249, 115, 22, 0.18);
+      border-left: 3px solid #f97316;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .slide-in {
+      animation: slideIn .3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-bg {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+    }
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>frontend</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
+</html>
