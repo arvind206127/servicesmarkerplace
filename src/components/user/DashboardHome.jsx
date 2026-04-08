@@ -13,6 +13,8 @@ function DashboardHome({ user, bookings = [], onNav, onOpenProvider }) {
   const upcoming = (bookings || []).filter(b => b.status === "upcoming");
   const completed = (bookings || []).filter(b => b.status === "completed");
 
+  console.log("Dashboard user prop:", user);
+
   return (
     <div className="space-y-5">
       {/* Welcome Banner */}

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { login, signUp } from "../../API/api";
+import { jwtDecode } from "jwt-decode";
 
 function AuthPage({ onLogin }) {
     const [isSignup, setIsSignup] = useState(false);
@@ -26,8 +27,9 @@ function AuthPage({ onLogin }) {
                     localStorage.setItem("token", res.data.token);
                     console.log("Token Saved Successfully!");
                 }
-
-                onLogin(res.data.user);
+                const decoded = jwtDecode(res.data.token);
+                console.log("Decoded Token:", decoded);
+                onLogin(decoded);
 
                 setForm({ name: "", email: "", password: "" });
             } else {

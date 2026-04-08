@@ -12,6 +12,7 @@ import SettingsPage from './components/user/SettingsPage';
 import ServicesPage from './components/user/ServicesPage';
 import ProfilePage from './components/user/ProfilePage';
 import { createBooking, fetchUserDashboard } from './API/api';
+import LoginButton from './components/user/LoginButton';
 
 function App() {
   const [page, setPage] = useState("auth");
@@ -29,11 +30,9 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const savedUser = localStorage.getItem('user');
 
     if (token) {
       // 1. Pehle user state restore karein
-      if (savedUser) setUser(JSON.parse(savedUser));
       setPage("dashboard");
 
       // 2. Phir data fetch karein
@@ -43,6 +42,7 @@ function App() {
           const res = await fetchUserDashboard();
           console.log("Backend Response:", res.data);   // 2. Check if this prints
           if (res.data.success) {
+            setUser(res.data.user)
             setBookings(res.data.bookings);
           }
         } catch (err) {
@@ -55,7 +55,6 @@ function App() {
 
   const handleLogin = (u) => {
     setUser(u);
-    localStorage.setItem('user', JSON.stringify(u)); // User info save karein
     setPage("dashboard");
     showToast(`Welcome, ${u.name}! 🙏`);
   };
@@ -63,13 +62,20 @@ function App() {
   const handleLogout = () => {
     localStorage.clear(); // Sab saaf karein
     setUser(null);
-    setPage("auth");
+    setPage("dashboard");
     setNav("dashboard");
   };
 
   // App.js mein is function ko sahi karein
   const confirmBooking = async (bookingDataFromModal) => {
     try {
+      if (!user) {
+        showToast("please login to book a service")
+        setPage("auth")
+        setBookingService(null);
+        return;
+      }
+
       // 1. Loader ya Toast dikhayein
       showToast("Booking process ho rahi hai...", "info");
 
@@ -102,6 +108,7 @@ function App() {
         <header className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-slate-700/40 flex-shrink-0" style={{ background: "#0d1222" }}>
           <h2 className="text-base font-black text-slate-100" style={{ fontFamily: "Georgia, serif" }}>{pageTitles[nav]}</h2>
           <div className="flex items-center gap-2 sm:gap-3">
+            <LoginButton user={user} onLogin={handleLogin} onLogout={handleLogout} onClick={() => setPage("auth")} />
             <div className="relative cursor-pointer">
               <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm bg-slate-800/60 border border-slate-700/40 hover:border-orange-500/30 transition-colors">🔔</div>
               <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-white text-[9px] font-bold" style={{ background: "#f97316" }}>3</span>

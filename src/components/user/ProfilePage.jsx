@@ -1,4 +1,5 @@
 function ProfilePage({ user, bookings, onNav }) {
+
   return (
     <div className="space-y-4 max-w-lg mx-auto">
       <div className="rounded-2xl p-6 border border-slate-700/40 text-center" style={{ background: "rgba(15,20,35,0.9)" }}>
@@ -24,7 +25,7 @@ function ProfilePage({ user, bookings, onNav }) {
           { icon: "📧", label: "Email", val: user?.email },
           { icon: "📱", label: "Phone", val: bookings?.phone },
           { icon: "📍", label: "Shehar", val: bookings?.address },
-          { icon: "🗓️", label: "Member Since", val: "January 2025" },
+          { icon: "🗓️", label: "Member Since", val: bookings?.date },
         ].map(f => (
           <div key={f.label} className="flex items-center gap-3 py-3 border-b border-slate-700/30 last:border-0">
             <span className="text-lg w-7">{f.icon}</span>

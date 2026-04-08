@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import Modal from "./Modal";
 import Stars from "./Star";
 import { Snowflake, Wrench, Zap, Hammer, Droplets, Bug } from 'lucide-react';
+import { submitReview } from "../../API/api";
 
 
 function BookingsPage({ bookings, setBookings, showToast }) {
     const [ratingTarget, setRatingTarget] = useState(null);
     const [ratingVal, setRatingVal] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [comment, setComment] = useState("")
 
     const statusConfig = {
         pending: { label: "⏳ Pending", cls: "bg-amber-500/15 text-amber-400" }, // Ise add karein
@@ -30,14 +32,29 @@ function BookingsPage({ bookings, setBookings, showToast }) {
         showToast("Booking cancel ho gayi", "info");
     };
 
-    const submitRating = () => {
+    const submitRating = async () => {
         if (!ratingVal) { showToast("Stars chunein", "error"); return; }
-        setBookings(bs => bs.map(b => b.id === ratingTarget ? { ...b, rating: ratingVal } : b));
-        showToast("Rating dene ke liye shukriya! ⭐", "success");
-        setRatingTarget(null); setRatingVal(0);
-    };
 
-
+        try {
+            const targetBooking = bookings.find(b => b.id === ratingTarget);
+            const res = await submitReview({
+                userId: targetBooking.customer_id, // Aapki table ke hisaab se
+                bookingId: ratingTarget,
+                rating: ratingVal,
+                comment: comment
+            });
+            if (res.data.success) {
+                setBookings(bs => bs.map(b => b.id === ratingTarget ? { ...b, rating: ratingVal } : b));
+                showToast("Rating dene ke liye shukriya! ⭐", "success");
+                setRatingTarget(null);
+                setRatingVal(0);
+                setComment("");
+            }
+        } catch (err) {
+            console.error(err);
+            showToast(err.response?.data?.message || "Rating save nahi ho payi", "error");
+        }
+    }
     return (
         <div className="space-y-3">
             {bookings.length === 0 && (
@@ -90,7 +107,12 @@ function BookingsPage({ bookings, setBookings, showToast }) {
                         <div className="flex justify-center mb-5">
                             <Stars value={ratingVal} onChange={setRatingVal} size="text-4xl" />
                         </div>
-                        <textarea placeholder="Apna anubhav likhein (optional)..." className="w-full bg-slate-800/60 border border-slate-700/40 rounded-xl p-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-500/40 resize-none h-20 mb-4" />
+                        <textarea
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                            placeholder="Apna anubhav likhein (optional)..."
+                            className="w-full bg-slate-800/60 border border-slate-700/40 rounded-xl p-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-500/40 resize-none h-20 mb-4"
+                        />
                         <div className="flex gap-3">
                             <button onClick={() => { setRatingTarget(null); setRatingVal(0); }} className="flex-1 py-2.5 rounded-xl text-sm font-semibold bg-slate-800/60 text-slate-400 border border-slate-700/40">Cancel</button>
                             <button onClick={submitRating} className="flex-1 py-2.5 rounded-xl text-sm font-bold text-white" style={{ background: "linear-gradient(135deg,#f59e0b,#d97706)" }}>Submit ✓</button>

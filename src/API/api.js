@@ -26,5 +26,6 @@ export const signUp = (data) => api.post("/auth/register", data);
 export const login = (data) => api.post("/auth/login", data);
 export const createBooking = (data) => api.post("/booking/createBooking", data);
 export const fetchUserDashboard = () => api.get("/user/userDashboard");
+export const submitReview = (data) => api.post("/review/createReview", data);
 
 export default api;

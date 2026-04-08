@@ -26,7 +26,7 @@ function SideBaar({ state, onNavChange }) {
             }`}
           >
             <span className="text-lg">{n.icon}</span>
-            <span>{n.label}</span>
+            <span>{n.label}</span>.
           </button>
         ))}
       </div>
